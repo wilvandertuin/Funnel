@@ -1,3 +1,13 @@
+/**
+ * jQuery Funnel
+ *
+ * Funnels online activity from different websites into a webpage
+ * ordered by time according to user specified templates.
+ *
+ * Copyright (c) 2011 Jeroen van der Tuin <jeroen@vandertuin.nl>
+ * Licensed under the MIT license.
+ */
+
 (function($) {
 
 $.funnel = function(element, options) {
@@ -36,7 +46,8 @@ $.funnel = function(element, options) {
 	/**
 	 * Constructor
 	 *
-	 * Loads each service and incorperates the items into the timeline.
+	 * Loads the data of each service. The handler of each service then
+	 * merges its items into the timeline and displays it asynchronously.
 	 */
 	plugin.init = function() {
 		plugin.options = $.extend({}, defaults, options);
