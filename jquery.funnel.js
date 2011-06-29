@@ -8,6 +8,16 @@
  * Licensed under the MIT license.
  */
 
+/**
+ * Overload the String object with a Tweetify which creates links
+ * from URLs, @usernames and #hashtags.
+ *
+ * From: http://css-tricks.com/snippets/jquery/jquery-tweetify-text/
+ */
+String.prototype.tweetify = function() {
+	return this.replace(/((ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?)/gi,'<a href="$1">$1</a>').replace(/(^|\s)#(\w+)/g,'$1<a href="http://search.twitter.com/search?q=%23$2">#$2</a>').replace(/(^|\s|.)@(\w+)/g,'$1<a href="http://twitter.com/$2">@$2</a>');
+};
+
 (function($) {
 
 $.funnel = function(element, options) {
