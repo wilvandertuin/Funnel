@@ -9,16 +9,62 @@
  */
 
 /**
- * Overload the String object with a Tweetify which creates links
+ * Overload the String object with Tweetify which creates links
  * from URLs, @usernames and #hashtags.
  *
- * From: http://css-tricks.com/snippets/jquery/jquery-tweetify-text/
+ * http://css-tricks.com/snippets/jquery/jquery-tweetify-text/
  */
 String.prototype.tweetify = function() {
 	return this
 		.replace(/((ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?)/gi,'<a href="$1">$1</a>')
 		.replace(/(^|\s)#(\w+)/g,'$1<a href="http://search.twitter.com/search?q=%23$2">#$2</a>')
 		.replace(/(^|\s|.)@(\w+)/g,'$1<a href="http://twitter.com/$2">@$2</a>');
+};
+
+/**
+ * Overload the Date object with a relative time method.
+ * https://github.com/jherdman/javascript-relative-time-helpers
+ */
+Date.prototype.relative = function(now_threshold) {
+	var delta = new Date() - this;
+
+	now_threshold = parseInt(now_threshold, 10);
+
+	if (isNaN(now_threshold)) {
+		now_threshold = 0;
+	}
+
+	if (delta <= now_threshold) return 'Just now';
+
+	var units = null;
+	var conversions = {
+		millisecond: 1,
+		second: 1000,
+		minute: 60,
+		hour: 60,
+		day: 24,
+		month: 30,
+		year: 12
+	};
+
+	for (var key in conversions) {
+		if (delta < conversions[key]) break;
+		units = key; // keeps track of the selected key over the iteration
+		delta = delta / conversions[key];
+	}
+
+	// pluralize a unit when the difference is greater than 1.
+	delta = Math.floor(delta);
+	if (delta !== 1) { units += "s"; }
+	return [delta, units, "ago"].join(" ");
+};
+
+/*
+ * Wraps up a common pattern used with this plugin whereby you take a String
+ * representation of a Date, and want back a date object.
+ */
+Date.fromString = function(str) {
+	return new Date(Date.parse(str));
 };
 
 (function($) {
