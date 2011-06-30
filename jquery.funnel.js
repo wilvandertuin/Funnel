@@ -115,7 +115,7 @@ $.funnel = function(element, options) {
 		for (var i = 0; i < plugin.options.services.length; i++) {
 			services[plugin.options.services[i].name](
 				plugin.options.services[i].user,
-				plugin.options.services[i].tpl
+				plugin.options.services[i].tmpl
 			);
 		}
 	}
@@ -146,7 +146,7 @@ $.funnel = function(element, options) {
 	/**
 	 * Twitter service
 	 */
-	services.twitter = function(user, tpl) {
+	services.twitter = function(user, tmpl) {
 		var max_items = Math.ceil(
 			plugin.options.max_items / plugin.options.services.length
 		);
@@ -166,7 +166,7 @@ $.funnel = function(element, options) {
 
 				plugin.items.push({
 					"item": tweet,
-					"html": $('#' + tpl).tmpl(tweet)
+					"html": $('#' + tmpl).tmpl(tweet)
 				});		
 			});
 
@@ -181,7 +181,7 @@ $.funnel = function(element, options) {
 	 *
 	 * Based on http://itp.nyu.edu/~cs220/dwd/class10-delicious.html
 	 */
-	services.delicious = function(user, tpl) {
+	services.delicious = function(user, tmpl) {
 		var max_items = Math.ceil(
 			plugin.options.max_items / plugin.options.services.length
 		);
@@ -205,7 +205,7 @@ $.funnel = function(element, options) {
 
 				plugin.items.push({
 					"item": bookmark,
-					"html": $('#' + tpl).tmpl(bookmark)
+					"html": $('#' + tmpl).tmpl(bookmark)
 				});
 			});
 
@@ -215,7 +215,7 @@ $.funnel = function(element, options) {
 		});
 	};
 
-	services.tumblr = function(user, tpl) {
+	services.tumblr = function(user, tmpl) {
 		var max_items = Math.ceil(
 			plugin.options.max_items / plugin.options.services.length
 		);
@@ -235,7 +235,7 @@ $.funnel = function(element, options) {
 
 			plugin.items.push({
 				"item": photo,
-				"html": $('#' + tpl.photo).tmpl(photo)
+				"html": $('#' + tmpl.photo).tmpl(photo)
 			});
 		};
 
@@ -250,7 +250,7 @@ $.funnel = function(element, options) {
 
 			plugin.items.push({
 				"item": video,
-				"html": $('#' + tpl.video).tmpl(video)
+				"html": $('#' + tmpl.video).tmpl(video)
 			});
 		};
 
@@ -282,8 +282,8 @@ $.funnel = function(element, options) {
 		});
 	};
 	
-	services.youtube = function(user, tpl) {};
-	services.github = function(user, tpl) {};
+	services.youtube = function(user, tmpl) {};
+	services.github = function(user, tmpl) {};
 
 	/**
 	 * Sorts the items by date.
