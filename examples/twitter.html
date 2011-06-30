@@ -1,0 +1,72 @@
+<!doctype html>
+
+<html>
+
+<head>
+	<title>jQuery Funnel - Twitter</title>
+	<link rel="stylesheet" type="text/css" href="examples.css" />
+</head>
+
+<body>
+
+<header>
+	<h1>jQuery Funnel</h1>
+	<h2>Twitter</h2>
+</header>
+
+<article>
+	<p>This example shows a timeline with only Twitter.</p>
+	<pre>
+		<code>
+$('#twitter').funnel({
+	"services": [{
+		"name": "twitter",
+		"user": "jeromche",
+		"tmpl": "tmpl_twitter"
+	}],
+	"max_items": 5
+});
+		</code>
+	</pre>
+	<ul id="twitter" class="timeline"></ul>
+</article>
+
+<footer>
+	<p>
+		jQuery Funnel plugin by Jeroen van der Tuin -
+		<a href="http://www.github.com/jeromche/funnel">http://www.github.com/jeromche/funnel</a>
+	</p>
+</footer>
+
+<script type="text/x-jquery-tmpl" id="tmpl_twitter">
+	<li class="twitter">
+		<a class="icon_service" href="http://www.twitter.com/${user}">
+			<img src="icons/twitter_16.png" alt="Twitter" />
+		</a>
+		<a class="date" href="http://www.twitter.com/${user}/status/${id}">${relative_date}</a>
+		<p class="msg">{{html msg}}</p>
+	</li>
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
+<script src="../jquery.funnel.js"></script>
+<script>
+$(function() {
+
+$('#twitter').funnel({
+	"services": [{
+		"name": "twitter",
+		"user": "jeromche",
+		"tmpl": "tmpl_twitter"
+	}],
+	"max_items": 5
+});
+
+});
+</script>
+
+
+
+</body>
+</html>
