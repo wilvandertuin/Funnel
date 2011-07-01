@@ -28,13 +28,13 @@ a {
 	border-radius: 5px;
 }
 
-.timeline li {
+.timeline > li {
 	border-bottom: 1px dotted dimgray;
 	padding: .5rem .5rem 0;
 	font-size: .75rem;
 }
 
-.timeline li:last-child {
+.timeline > li:last-child {
 	border-width: 0;
 	margin: 0;
 }

@@ -1,0 +1,76 @@
+<!doctype html>
+
+<html>
+
+<head>
+	<title>jQuery Funnel - Delicious</title>
+	<link rel="stylesheet" type="text/css" href="examples.css" />
+</head>
+
+<body>
+
+<header>
+	<h1>jQuery Funnel</h1>
+	<h2>Delicious</h2>
+</header>
+
+<article>
+	<p>This example shows a timeline with only Delicious.</p>
+	<pre>
+		<code>
+$('#delicious').funnel({
+	"services": [{
+		"name": "delicious",
+		"user": "jeromche",
+		"tmpl": "tmpl_delicious"
+	}],
+	"max_items": 5
+});
+		</code>
+	</pre>
+	<ul id="delicious" class="timeline"></ul>
+</article>
+
+<footer>
+	<p>
+		jQuery Funnel plugin by Jeroen van der Tuin -
+		<a href="http://www.github.com/jeromche/funnel">http://www.github.com/jeromche/funnel</a>
+	</p>
+</footer>
+
+<script type="text/x-jquery-tmpl" id="tmpl_delicious">
+	<li class="delicious">
+		<a class="icon_service" href="http://www.delicious.com/${user}"><img src="icons/delicious_16.png" alt="Delicious" /></a>
+		<span class="date">${relative_date}</span>
+		<p><a class="link" href="${url}">${title}</a></p>
+		<p class="msg">${msg}</p>
+		<ul class="tags">
+			{{each(index, value) tags}}
+				<li><a href="http://www.delicious.com/${user}/${value}">${value}</a></li>
+			{{/each}}
+		</ul>
+	</li>
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
+<script src="../jquery.funnel.js"></script>
+<script>
+$(function() {
+
+$('#delicious').funnel({
+	"services": [{
+		"name": "delicious",
+		"user": "jeromche",
+		"tmpl": "tmpl_delicious"
+	}],
+	"max_items": 5
+});
+
+});
+</script>
+
+
+
+</body>
+</html>
