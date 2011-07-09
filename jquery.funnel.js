@@ -53,7 +53,7 @@ Date.prototype.relative = function(now_threshold) {
 		delta = delta / conversions[key];
 	}
 
-	// pluralize a unit when the difference is greater than 1.
+	// Pluralize a unit when the difference is greater than 1.
 	delta = Math.floor(delta);
 	if (delta !== 1) { units += "s"; }
 	return [delta, units, "ago"].join(" ");
@@ -77,7 +77,7 @@ $.funnel = function(element, options) {
 		/**
 		 * Services to load the timeline of.
 		 */
-		services: null,
+		services: new Array(),
 		
 		/**
 		 * Max number of items to show in total.
@@ -111,6 +111,11 @@ $.funnel = function(element, options) {
 	plugin.init = function() {
 		plugin.options = $.extend({}, defaults, options);
 
+		// Set maximum number of items per source.
+		max_items_per_service = Math.ceil(
+			plugin.options.max_items / plugin.options.services.length
+		);
+
 		// Request each timeline
 		for (var i = 0; i < plugin.options.services.length; i++) {
 			services[plugin.options.services[i].name](
@@ -139,6 +144,12 @@ $.funnel = function(element, options) {
 	 */
 
 	/**
+	 * This is calculated upon init.
+	 */
+	var max_items_per_service = null;
+
+
+	/**
 	 * Container of services functions
 	 */
 	var services = {};
@@ -147,26 +158,18 @@ $.funnel = function(element, options) {
 	 * Twitter service
 	 */
 	services.twitter = function(user, tmpl) {
-		var max_items = Math.ceil(
-			plugin.options.max_items / plugin.options.services.length
-		);
-
 		var url = 'http://twitter.com/status/user_timeline/' + user
-			+ '.json?count=' + max_items + '&callback=?';
+			+ '.json?count=' + max_items_per_service + '&callback=?';
 
 		$.getJSON(url, function(data) {
 			$.each(data, function(i, item) {
-				var tweet = {
-					"date": item.created_at,
-					"relative_date": new Date(item.created_at).relative(),
-					"msg": item.text.tweetify(),
-					"user": user,
-					"id": item.id_str
-				};
+				item.date = item.created_at;
+				item.relative_date = new Date(item.created_at).relative();
+				item.user = user;
 
 				plugin.items.push({
-					"item": tweet,
-					"html": $('#' + tmpl).tmpl(tweet)
+					"item": item,
+					"html": $('#' + tmpl).tmpl(item)
 				});		
 			});
 
@@ -182,30 +185,20 @@ $.funnel = function(element, options) {
 	 * Based on http://itp.nyu.edu/~cs220/dwd/class10-delicious.html
 	 */
 	services.delicious = function(user, tmpl) {
-		var max_items = Math.ceil(
-			plugin.options.max_items / plugin.options.services.length
-		);
-
 		// Define the URL to be called
 		var url = 'http://feeds.delicious.com/v2/json/' + user +
-			'?plain&callback=?&count=' + max_items;
+			'?plain&callback=?&count=' + max_items_per_service;
 		
 		// Get the data from the web service and process
 		$.getJSON(url, function(data) {
 			$.each(data, function(i, item) {
-				var bookmark = {
-					"date": item.dt,
-					"relative_date": new Date(item.dt).relative(),
-					"url": item.u,
-					"title": item.d,
-					"tags": item.t,
-					"msg": item.n,
-					"user": user
-				};
+				item.date = item.dt;
+				item.relative_date =  new Date(item.dt).relative();
+				item.user = user;
 
 				plugin.items.push({
-					"item": bookmark,
-					"html": $('#' + tmpl).tmpl(bookmark)
+					"item": item,
+					"html": $('#' + tmpl).tmpl(item)
 				});
 			});
 
@@ -216,43 +209,8 @@ $.funnel = function(element, options) {
 	};
 
 	services.tumblr = function(user, tmpl) {
-		var max_items = Math.ceil(
-			plugin.options.max_items / plugin.options.services.length
-		);
-
 		// Define the URL to be called
 		var url = 'http://' + user + '.tumblr.com/api/read/json';
-
-		var process_photo = function(item) {
-			var photo = {
-				"date": item['date'],
-				"relative_date": new Date(item['date']).relative(),
-				"src": item['photo-url-250'],
-				"caption": item['photo-caption'],
-				"url": item['photo-link-url'],
-				"user": user
-			};
-
-			plugin.items.push({
-				"item": photo,
-				"html": $('#' + tmpl.photo).tmpl(photo)
-			});
-		};
-
-		var process_video = function(item) {
-			var video = {
-				"date": item['date'],
-				"relative_date": new Date(item['date']).relative(),
-				"video_player": item['video-player-250'],
-				"caption": item['video-caption'],
-				"user": user
-			};
-
-			plugin.items.push({
-				"item": video,
-				"html": $('#' + tmpl.video).tmpl(video)
-			});
-		};
 
 		// Get the data from the web service and process
 		$.ajax({
@@ -262,20 +220,23 @@ $.funnel = function(element, options) {
 				var posts = data.posts;
 
 				$.each(posts, function(i, item) {
+					item.relative_date = new Date(item['date']).relative();
+					item.user = user;
+
 					// There can be different types of posts.
 					// photo, video, quote
 
-					if (item.type == 'photo') {
-						process_photo(item);
-						return;
-					}
+					if (item.type == 'photo') return plugin.items.push({
+						"item": item,
+						"html": $('#' + tmpl.photo).tmpl(item)
+					});
 
-					if (item.type == 'video') {
-						process_video(item); 
-					}
+					if (item.type == 'video') return plugin.items.push({
+						"item": item,
+						"html": $('#' + tmpl.video).tmpl(item)
+					});
 				});
 
-				// Display all items.
 				sort();
 				display();
 			}
