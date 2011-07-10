@@ -226,15 +226,19 @@ $.funnel = function(element, options) {
 					// There can be different types of posts.
 					// photo, video, quote
 
-					if (item.type == 'photo') return plugin.items.push({
-						"item": item,
-						"html": $('#' + tmpl.photo).tmpl(item)
-					});
+					if (item.type == 'photo') {
+						return plugin.items.push({
+							"item": item,
+							"html": $('#' + tmpl.photo).tmpl(item)
+						});
+					}
 
-					if (item.type == 'video') return plugin.items.push({
-						"item": item,
-						"html": $('#' + tmpl.video).tmpl(item)
-					});
+					if (item.type == 'video') {
+						return plugin.items.push({
+							"item": item,
+							"html": $('#' + tmpl.video).tmpl(item)
+						});
+					}
 				});
 
 				sort();
