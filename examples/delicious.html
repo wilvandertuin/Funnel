@@ -40,20 +40,20 @@ $('#delicious').funnel({
 
 <script type="text/x-jquery-tmpl" id="tmpl_delicious">
 	<li class="delicious">
-		<a class="icon_service" href="http://www.delicious.com/${user}"><img src="icons/delicious_16.png" alt="Delicious" /></a>
+		<a class="icon_service" href="http://www.delicious.com/${a}"><img src="icons/delicious_16.png" alt="Delicious" /></a>
 		<span class="date">${relative_date}</span>
-		<p><a class="link" href="${url}">${title}</a></p>
-		<p class="msg">${msg}</p>
+		<p><a class="link" href="${u}">${d}</a></p>
+		<p class="msg">${n}</p>
 		<ul class="tags">
-			{{each(index, value) tags}}
-				<li><a href="http://www.delicious.com/${user}/${value}">${value}</a></li>
+			{{each(index, value) t}}
+				<li><a href="http://www.delicious.com/${a}/${value}">${value}</a></li>
 			{{/each}}
 		</ul>
 	</li>
 </script>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
-<script src="http://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
+<script src="../jquery.tmpl.min.js"></script>
 <script src="../jquery.funnel.js"></script>
 <script>
 $(function() {

@@ -40,11 +40,11 @@ $('#twitter').funnel({
 
 <script type="text/x-jquery-tmpl" id="tmpl_twitter">
 	<li class="twitter">
-		<a class="icon_service" href="http://www.twitter.com/${user}">
-			<img src="icons/twitter_16.png" alt="Twitter" />
+		<a class="icon_service" href="http://www.twitter.com/${user.screen_name}">
+			<img src="icons/twitter_16.png" title="${user.screen_name} on Twitter" />
 		</a>
-		<a class="date" href="http://www.twitter.com/${user}/status/${id}">${relative_date}</a>
-		<p class="msg">{{html msg}}</p>
+		<a class="date" href="http://www.twitter.com/${user.screen_name}/status/${id_str}">${relative_date}</a>
+		<p class="msg">{{html text.tweetify() }}</p>
 	</li>
 </script>
 
@@ -65,8 +65,6 @@ $('#twitter').funnel({
 
 });
 </script>
-
-
 
 </body>
 </html>

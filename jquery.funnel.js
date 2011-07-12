@@ -165,7 +165,6 @@ $.funnel = function(element, options) {
 			$.each(data, function(i, item) {
 				item.date = item.created_at;
 				item.relative_date = new Date(item.created_at).relative();
-				item.user = user;
 
 				plugin.items.push({
 					"item": item,
@@ -174,8 +173,7 @@ $.funnel = function(element, options) {
 			});
 
 			// Display all items.
-			sort();
-			display();
+			sort(), display();
 		});
 	};
 
@@ -203,8 +201,7 @@ $.funnel = function(element, options) {
 			});
 
 			// Display all items.
-			sort();
-			display();
+			sort(), display();
 		});
 	};
 
@@ -241,8 +238,7 @@ $.funnel = function(element, options) {
 					}
 				});
 
-				sort();
-				display();
+				sort(), display();
 			}
 		});
 	};
