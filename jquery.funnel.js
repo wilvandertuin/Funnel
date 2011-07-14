@@ -34,7 +34,9 @@ Date.prototype.relative = function(now_threshold) {
 		now_threshold = 0;
 	}
 
-	if (delta <= now_threshold) return 'Just now';
+	if (delta <= now_threshold) {
+		return 'Just now';
+	}
 
 	var units = null;
 	var conversions = {
@@ -93,8 +95,8 @@ $.funnel = function(element, options) {
 	// this will hold the merged default, and user-provided options
 	// plugin's properties will be available through this object like:
 	// plugin.options.propertyName from inside the plugin or
-	// element.data('pluginName').options.propertyName from outside the plugin, where "element" is the
-	// element the plugin is attached to;
+	// element.data('pluginName').options.propertyName from outside the
+	// plugin, where "element" is the element the plugin is attached to;
 	plugin.options = {}
 
 	/**
@@ -168,7 +170,7 @@ $.funnel = function(element, options) {
 
 				plugin.items.push({
 					"item": item,
-					"html": $('#' + tmpl).tmpl(item)
+					"html": $('#' + tmpl).tmpl(item, {"feed": data})
 				});		
 			});
 
@@ -192,11 +194,13 @@ $.funnel = function(element, options) {
 			$.each(data, function(i, item) {
 				item.date = item.dt;
 				item.relative_date =  new Date(item.dt).relative();
+
+				// TODO: Can the user be found inside the returned data?
 				item.user = user;
 
 				plugin.items.push({
 					"item": item,
-					"html": $('#' + tmpl).tmpl(item)
+					"html": $('#' + tmpl).tmpl(item, {"feed": data})
 				});
 			});
 
@@ -206,6 +210,7 @@ $.funnel = function(element, options) {
 	};
 
 	services.tumblr = function(user, tmpl) {
+
 		// Define the URL to be called
 		var url = 'http://' + user + '.tumblr.com/api/read/json';
 
@@ -214,37 +219,29 @@ $.funnel = function(element, options) {
 			"url": url,
 			"dataType": 'jsonp',
 			"success": function (data, textStatus, jqXHR) {
-				var posts = data.posts;
-
-				$.each(posts, function(i, item) {
+				$.each(data.posts, function(i, item) {
 					item.relative_date = new Date(item['date']).relative();
-					item.user = user;
 
-					// There can be different types of posts.
-					// photo, video, quote
+					// Skip if there is no template for this post type.
+					if (tmpl.hasOwnProperty(item.type) === false) return;
 
-					if (item.type == 'photo') {
-						return plugin.items.push({
-							"item": item,
-							"html": $('#' + tmpl.photo).tmpl(item)
-						});
+					// Replace dashes with underscores in keys so to they can be
+					// read by the template engine but retaining the original keys.
+					for (key in item) {
+						item[key.replace(/-/g, '_')] = item[key];
 					}
 
-					if (item.type == 'video') {
-						return plugin.items.push({
-							"item": item,
-							"html": $('#' + tmpl.video).tmpl(item)
-						});
-					}
+					// Add generated HTML for feed item to list.
+					plugin.items.push({
+						"item": item,
+						"html": $(tmpl[item.type]).tmpl(item, {"feed": data})
+					});
 				});
 
 				sort(), display();
 			}
 		});
 	};
-	
-	services.youtube = function(user, tmpl) {};
-	services.github = function(user, tmpl) {};
 
 	/**
 	 * Sorts the items by date.
