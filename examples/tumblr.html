@@ -18,11 +18,14 @@
 	<p>This example shows a timeline with only Delicious.</p>
 	<pre>
 		<code>
-$('#tumblr').funnel({
+$('#blog').funnel({
 	"services": [{
 		"name": "tumblr",
 		"user": "jeromche",
-		"tmpl": "tmpl_tumblr"
+		"tmpl": {
+			"photo": "tmpl_tumblr_photo",
+			"video": "tmpl_tumblr_video"
+		}
 	}],
 	"max_items": 5
 });
@@ -38,18 +41,52 @@ $('#tumblr').funnel({
 	</p>
 </footer>
 
-<script type="text/x-jquery-tmpl" id="tmpl_delicious">
-	<li class="delicious">
-		<a class="icon_service" href="http://www.delicious.com/${a}"><img src="icons/delicious_16.png" alt="Delicious" /></a>
-		<span class="date">${relative_date}</span>
-		<p><a class="link" href="${u}">${d}</a></p>
-		<p class="msg">${n}</p>
-		<ul class="tags">
-			{{each(index, value) t}}
-				<li><a href="http://www.delicious.com/${a}/${value}">${value}</a></li>
-			{{/each}}
-		</ul>
-	</li>
+<script type="text/x-jquery-tmpl" id="tmpl_tumblr_regular">
+	<article>
+		<h2>
+			<a class="icon_service" href="http://${$item.feed.tumblelog.name}.tumblr.com"><img src="icons/tumblr_16.png" alt="Tumblr" /></a>
+			<span class="date">${relative_date}</span>
+		</h2>
+		<h1>${regular_title}</h1>
+		{{html regular_body}}
+	</article>
+</script>
+
+<script type="text/x-jquery-tmpl" id="tmpl_tumblr_photo">
+	<article>
+		<h2>
+			<a class="icon_service" href="http://${$item.feed.tumblelog.name}.tumblr.com"><img src="icons/tumblr_16.png" alt="Tumblr" /></a>
+			<span class="date">${relative_date}</span>
+		</h2>
+		<figure>
+			<figcaption>{{html photo_caption}}</figcaption>
+			<a href="${photo_link_url}"><img src="${photo_url_250}" alt="" /></a>		
+		</figure>
+	</article>
+</script>
+
+<script type="text/x-jquery-tmpl" id="tmpl_tumblr_video">
+	<article>
+		<h2>
+			<a class="icon_service" href="http://${$item.feed.tumblelog.name}.tumblr.com"><img src="icons/tumblr_16.png" alt="Tumblr" /></a>
+			<span class="date">${relative_date}</span>
+		</h2>
+		<figure>
+			<figcaption>{{html caption}}</figcaption>
+			{{html video_player}}
+		</figure>
+	</article>
+</script>
+
+<script type="text/x-jquery-tmpl" id="tmpl_tumblr_quote">
+	<article>
+		<h2>
+			<a class="icon_service" href="http://${$item.feed.tumblelog.name}.tumblr.com"><img src="icons/tumblr_16.png" alt="Tumblr" /></a>
+			<span class="date">${relative_date}</span>
+		</h2>
+		<blockquote>{{html quote_text}}</blockquote>
+		<p>{{html quote_source}}</p>
+	</article>
 </script>
 
 <script src="../jquery-1.6.2.min.js"></script>
@@ -58,19 +95,22 @@ $('#tumblr').funnel({
 <script>
 $(function() {
 
-$('#delicious').funnel({
+$('#tumblr').funnel({
 	"services": [{
-		"name": "delicious",
+		"name": "tumblr",
 		"user": "jeromche",
-		"tmpl": "tmpl_delicious"
+		"tmpl": {
+			"regular": "#tmpl_tumblr_regular",
+			"photo": "#tmpl_tumblr_photo",
+			"video": "#tmpl_tumblr_video",
+			"quote": "#tmpl_tumblr_quote"
+		}
 	}],
-	"max_items": 5
+	"max_items": 25
 });
 
 });
 </script>
-
-
 
 </body>
 </html>
