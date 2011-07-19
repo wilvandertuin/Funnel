@@ -84,7 +84,12 @@ $.funnel = function(element, options) {
 		/**
 		 * Max number of items to show in total.
 		 */
-		max_items: 10
+		max_items: 10,
+
+		/**
+		 * A callback after every refresh.
+		 */
+		callback: null
 	}
 
 	/**
@@ -255,7 +260,7 @@ $.funnel = function(element, options) {
 	};
 
 	/**
-	 * Appends each item to the target element.
+	 * Appends each item to the target element and calls the callback.
 	 */
 	var display = function() {
 		$element.html('');
@@ -263,6 +268,10 @@ $.funnel = function(element, options) {
 		for (var i = 0; i < plugin.items.length; i++) {
 			if (i == plugin.options.max_items) break;
 			plugin.items[i].html.appendTo($element);
+		}
+
+		if (plugin.options.callback != null) {
+			plugin.options.callback();
 		}
 	};
 
