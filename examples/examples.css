@@ -1,17 +1,45 @@
 body {
+	background-color: rgb(225,225,225);
 	font-family: sans-serif;
+	font-size: 12px/18px;
+	margin: 0;
 }
 
 header {
+	background-color: lightgreen;
+	border-bottom: 1px solid white;
+	padding: 1rem;
+	padding-left: 160px;
 }
 
-article {
-	margin-bottom: 20px;
+header h1 {
+	margin-top: 0;
+	color: white;
+}
+
+body > article {
+	background-color: rgba(255,255,255,.5);
+	padding: 1rem;
+	padding-left: 160px;
+}
+
+body > article p:first-child {
+	margin-top: 0;
+}
+
+pre {
+	background-color: rgba(255,255,255,.9);
+	padding: .5rem;
+	width: 440px;
 }
 
 footer {
-	border-top: 1px solid darkred;
+	background-color: tomato;
+	color: white;
 	font-size: .75rem;
+	padding: 1rem;
+	padding-left: 160px;
+	clear: both;
 }
 
 a {
@@ -20,21 +48,31 @@ a {
 }
 
 .timeline {
-	width: 240px;
 	list-style-type: none;
 	margin: 0;
 	padding: 0;
-	border: 1px solid dimgray;
-	border-radius: 5px;
-}
-
-.timeline > li {
-	border-bottom: 1px dotted dimgray;
-	padding: .5rem .5rem 0;
 	font-size: .75rem;
 }
 
-.timeline > li:last-child {
-	border-width: 0;
+.timeline > article {
+	display: block;
+	float: left;
+	padding: .5rem;
+	background-color: white;
+	margin-bottom: 1rem;
+	margin-right: 1rem;
+	width: 400px;
+}
+
+.timeline h2 {
+	border-bottom: 1px solid rgba(0,0,0,.25);
+}
+
+.timeline figure {
 	margin: 0;
+}
+
+.timeline blockquote {
+	font-style: italic;
+	color: rgba(0,0,0,.95);
 }

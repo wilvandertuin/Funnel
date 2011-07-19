@@ -11,14 +11,12 @@
 
 <header>
 	<h1>jQuery Funnel</h1>
-	<h2>Tumblr</h2>
+	<h2>Tumblr example</h2>
 </header>
 
 <article>
-	<p>This example shows a timeline with only Delicious.</p>
-	<pre>
-		<code>
-$('#blog').funnel({
+	<p>This example shows a timeline with only a Tumblr feed.</p>
+	<pre><code>$('#blog').funnel({
 	"services": [{
 		"name": "tumblr",
 		"user": "jeromche",
@@ -28,17 +26,23 @@ $('#blog').funnel({
 		}
 	}],
 	"max_items": 5
-});
-		</code>
-	</pre>
-	<ul id="tumblr" class="timeline"></ul>
+});</code></pre>
+	<div id="tumblr" class="timeline">
+		<article>
+			<h2>
+				<a class="icon_service" href="http://feed.tumblelog.name}.tumblr.com"><img src="icons/tumblr_16.png" alt="Tumblr" /></a>
+				<span class="date">${relative_date}</span>
+			</h2>
+			<h1>${regular_title}</h1>
+			{{html regular_body}}
+		</article
+	</div>
 </article>
 
 <footer>
-	<p>
-		jQuery Funnel plugin by Jeroen van der Tuin -
-		<a href="http://www.github.com/jeromche/funnel">http://www.github.com/jeromche/funnel</a>
-	</p>
+	jQuery Funnel plugin by Jeroen van der Tuin
+	&mdash;
+	<a href="http://www.github.com/jeromche/funnel">http://www.github.com/jeromche/funnel</a>
 </footer>
 
 <script type="text/x-jquery-tmpl" id="tmpl_tumblr_regular">
@@ -60,7 +64,7 @@ $('#blog').funnel({
 		</h2>
 		<figure>
 			<figcaption>{{html photo_caption}}</figcaption>
-			<a href="${photo_link_url}"><img src="${photo_url_250}" alt="" /></a>		
+			<a href="${photo_link_url}"><img src="${photo_url_400}" alt="" /></a>		
 		</figure>
 	</article>
 </script>
