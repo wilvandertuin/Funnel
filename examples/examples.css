@@ -30,7 +30,7 @@ body > article p:first-child {
 pre {
 	background-color: rgba(255,255,255,.9);
 	padding: .5rem;
-	width: 440px;
+	width: 460px;
 }
 
 footer {
@@ -52,6 +52,8 @@ a {
 	margin: 0;
 	padding: 0;
 	font-size: .75rem;
+	background-color: rgba(123,123,123,.25);
+	padding: 1rem;
 }
 
 .timeline > article {
@@ -60,12 +62,14 @@ a {
 	padding: .5rem;
 	background-color: white;
 	margin-bottom: 1rem;
-	margin-right: 1rem;
 	width: 400px;
 }
 
 .timeline h2 {
 	border-bottom: 1px solid rgba(0,0,0,.25);
+	line-height: 2rem;
+	margin: 0;
+	padding: 0;
 }
 
 .timeline figure {
