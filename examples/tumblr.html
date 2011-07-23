@@ -16,17 +16,7 @@
 
 <article>
 	<p>This example shows a timeline with only a Tumblr feed.</p>
-	<pre><code>$('#blog').funnel({
-	"services": [{
-		"name": "tumblr",
-		"user": "jeromche",
-		"tmpl": {
-			"photo": "tmpl_tumblr_photo",
-			"video": "tmpl_tumblr_video"
-		}
-	}],
-	"max_items": 5
-});</code></pre>
+	<script src="https://gist.github.com/1096567.js"> </script>
 </article>
 
 <div id="tumblr" class="timeline"></div>
@@ -103,13 +93,17 @@ $('#tumblr').funnel({
 			"photo": "#tmpl_tumblr_photo",
 			"video": "#tmpl_tumblr_video",
 			"quote": "#tmpl_tumblr_quote"
-		}
+		},
+		"max_items": 25
 	}],
-	"max_items": 25,
 	"callback": function() {
-		$('#tumblr').masonry({
-			"itemSelector": "article",
-			"columnWidth": 430 
+		// After loading all images run masonry on the container element.
+		var el = $('#tumblr');
+		el.imagesLoaded(function() {
+			el.masonry({
+				"itemSelector": "article",
+				"columnWidth": 430 
+			});
 		});
 	}
 });
