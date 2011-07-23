@@ -1,0 +1,130 @@
+<!doctype html>
+
+<html>
+
+<head>
+	<title>jQuery Funnel - Multiple streams</title>
+	<link rel="stylesheet" type="text/css" href="examples.css" />
+</head>
+
+<body>
+
+<header>
+	<h1>jQuery Funnel</h1>
+	<h2>Multple streams example</h2>
+</header>
+
+<article>
+	<p>This example shows a timeline with multiple streams.</p>
+</article>
+
+<div class="timeline"></div>
+
+<footer>
+	jQuery Funnel plugin by Jeroen van der Tuin
+	&mdash;
+	<a href="http://www.github.com/jeromche/funnel">http://www.github.com/jeromche/funnel</a>
+</footer>
+
+<script type="text/x-jquery-tmpl" id="tmpl_tumblr_regular">
+	<article>
+		<h2>
+			<a class="icon_service" href="http://${$item.feed.tumblelog.name}.tumblr.com"><img src="icons/tumblr_16.png" alt="Tumblr" /></a>
+			<span class="date">${relative_date}</span>
+		</h2>
+		<h1>${regular_title}</h1>
+		{{html regular_body}}
+	</article>
+</script>
+
+<script type="text/x-jquery-tmpl" id="tmpl_tumblr_photo">
+	<article>
+		<h2>
+			<a class="icon_service" href="http://${$item.feed.tumblelog.name}.tumblr.com"><img src="icons/tumblr_16.png" alt="Tumblr" /></a>
+			<span class="date">${relative_date}</span>
+		</h2>
+		<figure>
+			<figcaption>{{html photo_caption}}</figcaption>
+			<a href="${photo_link_url}"><img src="${photo_url_400}" alt="" /></a>		
+		</figure>
+	</article>
+</script>
+
+<script type="text/x-jquery-tmpl" id="tmpl_tumblr_video">
+	<article>
+		<h2>
+			<a class="icon_service" href="http://${$item.feed.tumblelog.name}.tumblr.com"><img src="icons/tumblr_16.png" alt="Tumblr" /></a>
+			<span class="date">${relative_date}</span>
+		</h2>
+		<figure>
+			<figcaption>{{html video_caption}}</figcaption>
+			{{html video_player}}
+		</figure>
+	</article>
+</script>
+
+<script type="text/x-jquery-tmpl" id="tmpl_tumblr_quote">
+	<article>
+		<h2>
+			<a class="icon_service" href="http://${$item.feed.tumblelog.name}.tumblr.com"><img src="icons/tumblr_16.png" alt="Tumblr" /></a>
+			<span class="date">${relative_date}</span>
+		</h2>
+		<blockquote>{{html quote_text}}</blockquote>
+		<p>{{html quote_source}}</p>
+	</article>
+</script>
+
+<script type="text/x-jquery-tmpl" id="tmpl_twitter">
+	<article>
+		<h2>
+			<a class="icon_service" href="http://www.twitter.com/${user.screen_name}"><img src="icons/twitter_16.png" title="${user.screen_name} on Twitter" /></a>
+			<span class="date" href="http://www.twitter.com/${user.screen_name}/status/${id_str}">${relative_date}</span>
+		</h2>
+		<div>{{html text.tweetify() }}</div>
+	</article>
+</script>
+
+<script src="../lib/jquery-1.6.2.min.js"></script>
+<script src="../lib/jquery.tmpl.min.js"></script>
+<script src="../lib/jquery.masonry.min.js"></script>
+<script src="../jquery.funnel.js"></script>
+
+<script>
+$(function() {
+
+// Get feeds
+var el = $('.lifestream');
+el.funnel({
+	"services": [{
+		"name": "tumblr",
+		"user": "jeromche",
+		"tmpl": {
+			"regular": "#tmpl_tumblr_regular",
+			"photo": "#tmpl_tumblr_photo",
+			"video": "#tmpl_tumblr_video",
+			"quote": "#tmpl_tumblr_quote"
+		},
+		"max_items": 25
+	}, {
+		"name": "twitter",
+		"user": "jeromche",
+		"tmpl": "#tmpl_twitter",
+		"max_items": 25
+	}],
+	"callback": function() {
+		// After loading all images run masonry on the container element.
+		el.imagesLoaded(function() {
+			el.masonry({
+				"itemSelector": "article",
+				"columnWidth": 430 
+			});
+		});
+	}
+});
+
+});
+</script>
+
+</body>
+</html>
+
