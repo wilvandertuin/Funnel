@@ -11,7 +11,20 @@
 (function($) {
 
 var Funnel = function(element, options) {
-	var defaults = {
+	/**
+	 * Reference to the jQuery version of the DOM element.
+	 */
+	var $element = $(element);
+	
+	/**
+	 * Reference to the current instance of the object.
+	 */
+	var plugin = this;
+	
+	// plugin's properties will be available through this object like:
+	// plugin.settings.propertyName from inside the plugin or
+	// element.data('pluginName').settings.propertyName from outside.
+	plugin.settings = {
 		/**
 		 * Services to load the timeline of.
 		 */
@@ -20,30 +33,15 @@ var Funnel = function(element, options) {
 		/**
 		 * Max number of items to show in total.
 		 */
-		max_items: 10,
+		max_items: 25,
 
 		/**
 		 * A callback after every refresh.
 		 */
 		callback: null
-	}
+	};
 
-	/**
-	 * Reference to the current instance of the object.
-	 */
-	var plugin = this;
-
-	// this will hold the merged default, and user-provided options
-	// plugin's properties will be available through this object like:
-	// plugin.options.propertyName from inside the plugin or
-	// element.data('pluginName').options.propertyName from outside the
-	// plugin, where "element" is the element the plugin is attached to;
-	plugin.options = {}
-
-	/**
-	 * Reference to the jQuery version of the DOM element.
-	 */
-	var $element = $(element);
+	var services_required, services_completed = 0;
 
 	/**
 	 * Constructor
@@ -52,31 +50,31 @@ var Funnel = function(element, options) {
 	 * merges its items into the timeline and displays it asynchronously.
 	 */
 	plugin.init = function() {
-		plugin.options = $.extend({}, defaults, options);
+		$.extend(plugin.settings, options);
 
-		// Request each timeline
-		for (var i = 0; i < plugin.options.services.length; i++) {
-			var service = plugin.options.services[i];
+		// Remember how many services are required.
+		services_required = plugin.settings.services.length;
+
+		// Request each timeline.
+		for (var i = 0; i < services_required; i++) {
+			var service = plugin.settings.services[i];
 			services[service.name](service);
 		}
 	}
 
 	/**
-	 * This array contains the items selected by the different services.
+	 * This array contains the items selected by the different services,
+	 * they are publicly available from the element.
 	 */
 	plugin.items = new Array();
 
 	/**
-	 * Private vars and functions
-	 */
-
-	/**
-	 * Container of services functions
+	 * Container of services functions.
 	 */
 	var services = {};
 
 	/**
-	 * Twitter service
+	 * Twitter
 	 */
 	services.twitter = function(options) {
 		var url = 'http://twitter.com/status/user_timeline/' + options.user
@@ -89,11 +87,9 @@ var Funnel = function(element, options) {
 
 				plugin.items.push({
 					"item": item,
-					"html": $('#' + options.tmpl).tmpl(item, {"feed": data})
-				});		
+					"html": $(options.tmpl).tmpl(item, {"feed": data})
+				});	
 			});
-
-			// Display all items.
 			sort(), display();
 		});
 	};
@@ -104,35 +100,29 @@ var Funnel = function(element, options) {
 	 * Based on http://itp.nyu.edu/~cs220/dwd/class10-delicious.html
 	 */
 	services.delicious = function(options) {
-		// Define the URL to be called
 		var url = 'http://feeds.delicious.com/v2/json/' + options.user +
 			'?plain&callback=?&count=' + options.max_items;
 		
-		// Get the data from the web service and process
 		$.getJSON(url, function(data) {
 			$.each(data, function(i, item) {
 				item.date = item.dt;
 				item.relative_date =  new Date(item.dt).relative();
 
 				// TODO: Can the user be found inside the returned data?
-				item.user = user;
+				item.user = options.user;
 
 				plugin.items.push({
 					"item": item,
-					"html": $('#' + options.tmpl).tmpl(item, {"feed": data})
+					"html": $(options.tmpl).tmpl(item, {"feed": data})
 				});
 			});
-
-			// Display all items.
 			sort(), display();
 		});
 	};
 
 	services.tumblr = function(options) {
-		// Define the URL to be called
 		var url = 'http://' + options.user + '.tumblr.com/api/read/json';
 
-		// Get the data from the web service and process
 		$.ajax({
 			"url": url,
 			"dataType": 'jsonp',
@@ -149,7 +139,6 @@ var Funnel = function(element, options) {
 						item[key.replace(/-/g, '_')] = item[key];
 					}
 
-					// Add generated HTML for feed item to list.
 					plugin.items.push({
 						"item": item,
 						"html": $(options.tmpl[item.type]).tmpl(item, {"feed": data})
@@ -177,13 +166,21 @@ var Funnel = function(element, options) {
 	var display = function() {
 		$element.html('');
 
+		// Place the HTML for all items in the timeline, minding the limit.
 		for (var i = 0; i < plugin.items.length; i++) {
-			if (i == plugin.options.max_items) break;
+			if (i == plugin.settings.max_items) break;
 			plugin.items[i].html.appendTo($element);
 		}
 
-		if (plugin.options.callback != null) {
-			plugin.options.callback();
+		services_completed += 1;
+
+		if (services_completed < services_required) {
+			return;
+		}
+
+		// Execute a global callback.
+		if (plugin.settings.callback != null) {
+			plugin.settings.callback();
 		}
 	};
 
