@@ -80,7 +80,23 @@
 			<a class="icon_service" href="http://www.twitter.com/${user.screen_name}"><img src="icons/twitter_16.png" title="${user.screen_name} on Twitter" /></a>
 			<span class="date" href="http://www.twitter.com/${user.screen_name}/status/${id_str}">${relative_date}</span>
 		</h2>
-		<div>{{html text.tweetify() }}</div>
+		<p>{{html text.tweetify() }}</p>
+	</article>
+</script>
+
+<script type="text/x-jquery-tmpl" id="tmpl_delicious">
+	<article>
+		<h2>
+			<a class="icon_service" href="http://www.delicious.com/${a}"><img src="icons/delicious_16.png" alt="Delicious" /></a>
+			<span class="date">${relative_date}</span>
+		</h2>
+		<p><a class="link" href="${u}">${d}</a></p>
+		<p class="msg">${n}</p>
+		<ul class="tags">
+			{{each(index, value) t}}
+				<li><a href="http://www.delicious.com/${a}/${value}">${value}</a></li>
+			{{/each}}
+		</ul>
 	</article>
 </script>
 
@@ -93,7 +109,7 @@
 $(function() {
 
 // Get feeds
-var el = $('.lifestream');
+var el = $('.timeline');
 el.funnel({
 	"services": [{
 		"name": "tumblr",
@@ -110,6 +126,11 @@ el.funnel({
 		"user": "jeromche",
 		"tmpl": "#tmpl_twitter",
 		"max_items": 25
+	}, {
+		"name": "delicious",
+		"user": "jeromche",
+		"tmpl": "#tmpl_delicious",
+		"max_items": 25
 	}],
 	"callback": function() {
 		// After loading all images run masonry on the container element.
@@ -119,7 +140,8 @@ el.funnel({
 				"columnWidth": 430 
 			});
 		});
-	}
+	},
+	"max_items": 100
 });
 
 });
