@@ -1,0 +1,1 @@
+A plugin that combines, at the moment, feeds from Twitter, Delicious and Tumblr. It uses jQuery templates and allows for callbacks.
